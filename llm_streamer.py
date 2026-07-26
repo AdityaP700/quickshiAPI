@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.response import StreamingResponse
+from fastapi.responses import StreamingResponse
 #since we want to introduce a delay
 import time
 ## the idea here is to stream the words
@@ -29,3 +29,5 @@ async def chat_stream(prompt:str):
 
 ## questions : What happens if two users hit this
 #  endpoint at exactly the same time?
+## invalid sse format
+## missing headers : without media type ,proxies and browsers might buffer the response wiatinting

@@ -1,4 +1,0 @@
-## When people say Synchronous (Sync) in programming, they mean the code is synchronized with the CPU's timeline.The Reality: Your code must finish Step 1 before it is allowed to move to Step 2.The Metaphor: Imagine a high-end restaurant with a brilliant chef (your CPU). A customer orders food. If the kitchen is Synchronous, the chef puts a steak on the grill, and then stands there staring at the steak for 10 minutes until it flips. The chef refuses to cut vegetables, take other orders, or plate food because they are locked into that one task.
-
-
-## Asynchronous (Async) means "Don't wait for the clock."The Metaphor: The chef puts the steak on the grill, sets a timer (await), and immediately turns around to chop onions for another table. When the timer dings, the chef comes back to flip the steak. One chef can now feed 50 tables at once.
