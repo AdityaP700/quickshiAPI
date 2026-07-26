@@ -26,4 +26,19 @@ DELETE: Removes data from the server. In AI, this is used to clear chat historie
 
 To help apply this, let me know what AI tool or API you are currently working with (e.g., OpenAI, Hugging Face, or a custom model), and I can provide an exact code example of these requests in action.
 
-A payload is the actual cargo or essential data carried within a packet or message transmission. 
+A payload is the actual cargo or essential data carried within a packet or message transmission.
+
+## from fastapi import FastAPI
+<!--  -->
+app = FastAPI()
+#Retrieves data from
+#a server without modifying anything
+@app.get("/")
+#read from the root
+def read_root():
+    #return the response
+    return {"message": "Hello world"}
+
+# BaseModel is the primary class used to define schemas, structure data, and enforce strict type validation in Python.
+
+# An HTTPException is a specialized exception used in web frameworks like FastAPI and Starlette to immediately stop request processing and return an error response to the client. It pairs an HTTP status code with a descriptive message so your API can explain exactly what went wrong.
