@@ -55,3 +55,8 @@ ge: Greater than or Equal to (≥)
 le: Less than or Equal to (≤)
 
 ## The Pydantic code you provided uses the Field function to add advanced validation rules and metadata to model fields.
+
+
+## StreamingResponse : Instead of sending one massive payload at the very end, it leaves the HTTP connection open and streams data to the client chunk-by-chunk, token-by-token, as it becomes available
+
+## yield is a "brb" (be right back): When a function hits yield, it hands over a single piece of data, but stays alive. It freezes exactly where it is, remembers all its variables, and waits. When you ask it for the next piece of data, it wakes up, runs until it hits the next yield, and pauses again.
