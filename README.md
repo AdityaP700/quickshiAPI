@@ -30,6 +30,33 @@ I tackled two specific challenges in this project to learn core AI Engineering c
 - **Implementation:** Built an asynchronous generator using `asyncio.sleep()` to simulate dummy latency and used FastAPI's `StreamingResponse` to serve Server-Sent Events (SSE).
 - **Codebase Link:** Initial dummy attempt in [`llm_streamer.py`](llm_streamer.py), and the fully refactored, robust version in [`refac_llm_streamer.py`](refac_llm_streamer.py) (Reference: [`docs/task_02_llm_streaming.md`](docs/task_02_llm_streaming.md))
 
+## Architecture: Real-time LLM Streaming Simulation
+
+To understand how the backend mimics a production LLM streaming pipeline, consider the following architecture. At a high level, instead of returning a massive payload at the end of a process, the server keeps the HTTP connection open and utilizes an asynchronous generator to push chunks of data (tokens) to the client as soon as they are "generated" (simulated via `asyncio.sleep`).
+
+```mermaid
+sequenceDiagram
+    participant C as Client (Browser / EventSource)
+    participant F as FastAPI Server
+    participant L as Simulated LLM (Async Generator)
+    
+    C->>F: GET /chat/stream?prompt=...
+    Note over F: Validates payload &<br/>establishes SSE Connection
+    F-->>C: HTTP 200 OK (Content-Type: text/event-stream)
+    
+    F->>L: Invoke async_llm_generator(prompt)
+    
+    loop Token Generation
+        Note over L: Awaits asyncio.sleep(0.5s)<br/>to mimic inference latency
+        L-->>F: yields token string
+        Note over F: Formats to SSE: <br/>data: {"token": "..."}\n\n
+        F-->>C: Streams chunk over persistent connection
+    end
+    
+    L-->>F: yields [DONE]
+    F-->>C: Streams [DONE] & terminates connection
+```
+
 ## Technical Documentation & Learnings
 
 To keep this README concise, detailed technical documentation has been separated into the `docs/` directory. Here is a brief overview of the key takeaways:
