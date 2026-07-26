@@ -42,3 +42,16 @@ def read_root():
 # BaseModel is the primary class used to define schemas, structure data, and enforce strict type validation in Python.
 
 # An HTTPException is a specialized exception used in web frameworks like FastAPI and Starlette to immediately stop request processing and return an error response to the client. It pairs an HTTP status code with a descriptive message so your API can explain exactly what went wrong.
+
+
+1. Text & Lists (Size Validation)When restricting text length or array size, use length keywords:
+min_length: "I need at least this many items/characters.
+"max_length: "Do not exceed this amount."
+
+2. Numbers (Math Validation)When checking numeric sizes, use standard algebraic abbreviations:
+gt: Greater Than (>)
+lt: Less Than (<)
+ge: Greater than or Equal to (≥)
+le: Less than or Equal to (≤)
+
+## The Pydantic code you provided uses the Field function to add advanced validation rules and metadata to model fields.
