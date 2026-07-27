@@ -144,3 +144,16 @@ else:
 #  If a developer forgets to set this
 #  flag in a new test suite, the entire test suite freezes for minutes trying to download/load a 2GB model.Side Effects: Importing main.py still triggers unexpected logic. It violates the "Separation of Concerns" principle because the file is managing its own system state during an import statement.Polluted Global Namespace: It makes mocking incredibly difficult because the testing framework has to monkeypatch variables that might or might not exist depending on
 #  when the file was imported.
+
+
+it means that the object receives an objcet from an outside source and rather than creating them itself. the technique seperates object creation from usage ,making code easier to test,change and maintain
+
+#The initialization logic runs during the
+# pre-traffic startup phase before the yield statement,
+# attaching the asset to app.state.
+# When requests come in, Dependency Injection
+# acts as the bridge—reaching into
+# app.state to inject the pre-loaded asset into the route
+#in milliseconds. Finally,
+#when the process terminates,
+# the code after yield executes
