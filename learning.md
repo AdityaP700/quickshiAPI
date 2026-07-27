@@ -127,3 +127,20 @@ If you pass a generator to StreamingResponse without setting the correct headers
 Content-Type: text/event-stream: This tells the client browser not to download the response as a file, but to hand the stream over to the browser's SSE engine.Cache-Control: no-cache: Prevents intermediate proxies or browsers from caching chunks, ensuring the user sees the tokens in absolute real-time.
 
 When a user hits your endpoint, FastAPI immediately executes the route.The Handshake: FastAPI looks at the route and sees you are returning a StreamingResponse. It instantly sends a 200 OK success status code across the internet to the client browser to say, "Everything is good! Open the gates, a stream is coming."The Point of No Return: Once that 200 OK header leaves your server's network card, the HTTP status code is locked in stone. You cannot change your mind or take it back.The Crash: If Python then enters your async_llm_generator function, checks the prompt, finds out it's empty, and triggers a raise HTTPException(status_code=400), the server panics. It has already promised a 200 OK stream to the browser! Raising an exception mid-stream will abruptly rip the connection apart, causing a messy network crash in the browser instead of a clean, helpful error message.The Solution: "Streaming" the Error (The Safe Way)Since you cannot change the HTTP status code after the stream begins, a Senior Engineer handles errors defensively by sending the error message down the stream as an event.Let's look at what the code does step-by-step:if not prompt.strip():This sanitizes the input. .strip() removes all accidental whitespaces. If a user just inputs empty spaces like "    ", it flags it as an empty prompt.yield f"data: {json.dumps({'error': ...})}\n\n"Instead of crashing the server with an exception, you play along with the stream protocol [the_fake_llm_streamer_requirement]. You create a structured JSON payload explaining the error, wrap it in the standard SSE format, and yield it over the conveyor belt [the_fake_llm_streamer_requirement].returnThis acts as an intentional early exit. It cleanly shuts down the generator loop so the server stops executing and doesn't try to stream the rest of the words.
+
+
+import os
+
+# Messy Fix 1: Global variable + Environment check
+if os.getenv("ENV") != "TESTING":
+    embedding_model = load_2gb_model()  # Breaks if you forget to set the env var
+    redis_client = connect_to_redis()
+else:
+    embedding_model = None  # Forces you to write dirty 'if' checks everywhere
+
+
+##Brittle Code: It relies heavily on
+# environment variables (ENV="TESTING").
+#  If a developer forgets to set this
+#  flag in a new test suite, the entire test suite freezes for minutes trying to download/load a 2GB model.Side Effects: Importing main.py still triggers unexpected logic. It violates the "Separation of Concerns" principle because the file is managing its own system state during an import statement.Polluted Global Namespace: It makes mocking incredibly difficult because the testing framework has to monkeypatch variables that might or might not exist depending on
+#  when the file was imported.
